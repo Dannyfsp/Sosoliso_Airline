@@ -1,6 +1,6 @@
 CREATE TYPE role_type AS ENUM ('passenger', 'admin');
 
-CREATE TYPE payment_type AS ENUM ('cash', 'card');
+CREATE TYPE payment_type AS ENUM ('transfer', 'card');
 
 CREATE TYPE status_type AS ENUM ('failed', 'in-progress', 'success');
 
@@ -17,7 +17,7 @@ CREATE TABLE
         first_name VARCHAR(50) NOT NULL,
         last_name VARCHAR(50) NOT NULL,
         email VARCHAR(100) UNIQUE NOT NULL,
-        password VARCHAR(50),
+        password TEXT,
         roles role_type NOT NULL DEFAULT 'passenger',
         created_at DATE NOT NULL DEFAULT now()
     );
@@ -65,9 +65,10 @@ CREATE TABLE
         passenger_id INTEGER NOT NULL,
         flight_class class_type NOT NULL,
         number_of_seats INTEGER NOT NULL,
-        seat_number INTEGER UNIQUE NOT NULL,
+        seat_number VARCHAR(20) UNIQUE NOT NULL,
         date_time TIMESTAMP NOT NULL DEFAULT now(),
-        is_cancelled BOOLEAN NOT NULL DEFAULT false FOREIGN KEY (flight_id) REFERENCES flight(id),
+        is_cancelled BOOLEAN NOT NULL DEFAULT false,
+        FOREIGN KEY (flight_id) REFERENCES flight(id),
         FOREIGN KEY (passenger_id) REFERENCES passenger(id)
     );
 
