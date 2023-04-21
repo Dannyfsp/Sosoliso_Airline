@@ -8,4 +8,4 @@ import { loginMiddleware, registerMiddleware } from "../middleware/validate";
 export const router: Router = Router();
 
 router.post("/auth/signup", registerMiddleware, passengerSignUp);
-router.post("/auth/login", loginMiddleware, passengerSignIn);
+router.post("/auth/signin", loginMiddleware, passengerSignIn);

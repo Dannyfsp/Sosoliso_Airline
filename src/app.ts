@@ -5,6 +5,9 @@ import redisClient from "./auth/config/redis";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import "./auth/config/db";
+import bodyParser from "body-parser";
+import { router as authRouter } from "./auth/routes/auth.route";
+import { router as adminRouter } from "./admin/routes/admin.route";
 
 declare module "express-session" {
   export interface SessionData {
@@ -41,14 +44,14 @@ app.use(
     },
   })
 );
-
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-import { router as authRouter } from "./auth/routes/auth.route";
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to the best Airline Application ever😊😊😊");
 });
 
 app.use("/api/v1", authRouter);
+app.use("/api/v1", adminRouter);
 
 export default app;

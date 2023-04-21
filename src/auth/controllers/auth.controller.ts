@@ -18,7 +18,7 @@ export const passengerSignUp = async (
     let hashPassword = await hash.hashPwd(password);
     password = hashPassword;
 
-    const passenger = await authSerice.createPassenger(
+    const passenger = await authSerice.addPassenger(
       first_name,
       last_name,
       email,

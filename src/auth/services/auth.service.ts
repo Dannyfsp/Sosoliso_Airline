@@ -14,7 +14,7 @@ export const authSerice = {
     );
     return result.rows[0];
   },
-  createPassenger: async (
+  addPassenger: async (
     first_name: string,
     last_name: string,
     email: string,
