@@ -1,12 +1,14 @@
 import pool from "../../config/db";
 import { IPassenger } from "../interface/auth.interface";
+
 export const authSerice = {
-  findByPK: async (id: number, model: string): Promise<IPassenger | null> => {
+  findByPK: async (id: number, model: string): Promise<IPassenger | any> => {
     const result = await pool.query(`SELECT * FROM ${model} WHERE id = $1`, [
       id,
     ]);
     return result.rows[0];
   },
+
   findByEmail: async (email: string): Promise<IPassenger> => {
     const result = await pool.query(
       "SELECT * FROM passenger WHERE email = $1",
@@ -14,6 +16,7 @@ export const authSerice = {
     );
     return result.rows[0];
   },
+
   addPassenger: async (
     first_name: string,
     last_name: string,
@@ -25,5 +28,12 @@ export const authSerice = {
       [first_name, last_name, email, password]
     );
     return result.rows[0];
+  },
+
+  allFlight: async (limit: number, offset: number) => {
+    const result = await pool.query(
+      `SELECT * FROM flight LIMIT ${limit} OFFSET ${offset}`
+    );
+    return result.rows;
   },
 };

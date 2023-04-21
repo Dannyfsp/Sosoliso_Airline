@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { authSerice } from "../services/auth.service";
 import { Passenger, createPassenger } from "../interface/auth.interface";
 import { hash } from "../../utils/bcrypt";
+import { adminService } from "../../admin/services/admin.service";
 
 export const passengerSignUp = async (
   req: Request<{}, {}, createPassenger>,
@@ -48,6 +49,7 @@ export const passengerSignIn = async (
       return res
         .status(400)
         .json({ message: "User does exist, please sign up" });
+
     const correctPassword = await hash.comparePassword(
       password,
       passenger.password
@@ -62,8 +64,43 @@ export const passengerSignIn = async (
       user: req.session.passenger.id,
     });
   } catch (error: any) {
-    console.log(error);
+    return res.status(500).json({ message: error.message });
+  }
+};
 
+export const passengerLogout = async (req: Request, res: Response) => {
+  try {
+    await new Promise((resolve, reject) => {
+      req.session.destroy((err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(
+            res.status(200).json({ message: "user logged out successfully" })
+          );
+        }
+      });
+    });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const allFlights = async (req: Request, res: Response) => {
+  const page: number = Number(req.query.page);
+  const limit: number = 5;
+  const offset: number = (page - 1) * limit;
+  try {
+    if (page) {
+      const pagination = await authSerice.allFlight(limit, offset);
+      if (pagination.length <= 0)
+        return res.status(400).json({ message: "No flights for this page" });
+      else return res.status(200).json(pagination);
+    }
+
+    const data = await adminService.getAll("flight");
+    return res.status(200).json(data);
+  } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }
 };

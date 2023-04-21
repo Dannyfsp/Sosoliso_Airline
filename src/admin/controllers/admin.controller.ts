@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { IAddFlight, createFlight } from "../interface/admin.interface";
 import { adminService } from "../services/admin.service";
 import { IPassenger } from "../../auth/interface/auth.interface";
+import { authSerice } from "../../auth/services/auth.service";
 
 export const addFlight = async (
   req: Request<{}, {}, createFlight>,
@@ -81,6 +82,40 @@ export const getAllCancelledFlight = async (
       return res.status(400).json({ message: "No Cancelled flight" });
 
     return res.status(200).json(isCanlledFlight);
+  } catch (error: any) {
+    return res.status(500).json(error.message);
+  }
+};
+
+export const getFlight = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const id: number = Number(req.params.id);
+  try {
+    const flight = await authSerice.findByPK(id, "flight");
+    if (!flight)
+      return res
+        .status(400)
+        .json({ message: "there is no flight details for this ID" });
+    return res.status(200).json(flight);
+  } catch (error: any) {
+    return res.status(500).json(error.message);
+  }
+};
+
+export const getBooking = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const id: number = Number(req.params.id);
+  try {
+    const booking = await authSerice.findByPK(id, "booking");
+    if (!booking)
+      return res
+        .status(400)
+        .json({ message: "there is no booking details for this ID" });
+    return res.status(200).json(booking);
   } catch (error: any) {
     return res.status(500).json(error.message);
   }
