@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { authSerice } from "../services/auth.service";
 import { Passenger, createPassenger } from "../interface/auth.interface";
-import { hash } from "../utils/bcrypt";
+import { hash } from "../../utils/bcrypt";
 
 export const passengerSignUp = async (
   req: Request<{}, {}, createPassenger>,

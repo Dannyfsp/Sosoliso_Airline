@@ -1,4 +1,4 @@
-import pool from "../config/db";
+import pool from "../../config/db";
 import { IPassenger } from "../interface/auth.interface";
 export const authSerice = {
   findByPK: async (id: number, model: string): Promise<IPassenger | null> => {

@@ -1,11 +1,10 @@
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
-import redisClient from "./auth/config/redis";
+import redisClient from "./config/redis";
 import session from "express-session";
 import connectRedis from "connect-redis";
-import "./auth/config/db";
-import bodyParser from "body-parser";
+import "./config/db";
 import { router as authRouter } from "./auth/routes/auth.route";
 import { router as adminRouter } from "./admin/routes/admin.route";
 
@@ -14,13 +13,6 @@ declare module "express-session" {
     passenger: any;
   }
 }
-
-redisClient.on("connect", () => {
-  console.log("Redis is connected");
-});
-redisClient.on("error", (err) => {
-  console.error(err);
-});
 
 const RedisStore = connectRedis(session);
 

@@ -1,5 +1,4 @@
-import pool from "../../auth/config/db";
-import { IPassenger } from "../../auth/interface/auth.interface";
+import pool from "../../config/db";
 import { IAddFlight } from "../interface/admin.interface";
 
 export const adminService = {
