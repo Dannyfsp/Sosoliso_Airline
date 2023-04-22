@@ -8,7 +8,7 @@ export const passengerSignUp = async (
   req: Request<{}, {}, createPassenger>,
   res: Response
 ): Promise<Response> => {
-  let { first_name, last_name, email, password } = req.body;
+  let { firstName, lastName, email, password } = req.body;
   try {
     const userExist: Passenger = await authSerice.findByEmail(email);
     if (userExist)
@@ -20,8 +20,8 @@ export const passengerSignUp = async (
     password = hashPassword;
 
     const passenger = await authSerice.addPassenger(
-      first_name,
-      last_name,
+      firstName,
+      lastName,
       email,
       password
     );

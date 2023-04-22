@@ -5,13 +5,13 @@ export const registerMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  const { first_name, last_name, email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
   switch (true) {
-    case !first_name:
+    case !firstName:
       return res.status(400).json({ message: "first name is required!" });
-    case !last_name:
+    case !lastName:
       return res.status(400).json({ message: "last name is required" });
-    case !email:
+    case !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email):
       return res.status(400).json({ message: "email is required" });
     case !password || password.length < 5:
       return res.status(400).json({
@@ -29,7 +29,7 @@ export const loginMiddleware = (
 ) => {
   const { email, password } = req.body;
   switch (true) {
-    case !email:
+    case !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email):
       return res.status(400).json({ message: "email is required" });
     case !password || password.length < 5:
       return res.status(400).json({

@@ -1,25 +1,25 @@
 import { Request } from "express";
 export interface IPassenger {
   id: number;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   roles: string;
-  created_at: Date;
+  createdAt?: Date;
 }
 
 export interface createPassenger {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 }
 
 export type Passenger = {
   id: number;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   roles: string;

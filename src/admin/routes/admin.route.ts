@@ -25,8 +25,8 @@ router.get(
 );
 router.post(
   "/admin/flight",
-  validateMiddleware,
   authMiddleware,
   adminAuth,
+  validateMiddleware,
   addFlight
 );

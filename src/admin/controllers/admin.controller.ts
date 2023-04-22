@@ -9,31 +9,31 @@ export const addFlight = async (
   res: Response<IAddFlight>
 ) => {
   const {
-    departure_terminal_id,
-    arrival_terminal_id,
-    flight_type,
-    departure_date_time,
-    arrival_date_time,
-    available_seats_first_class,
-    price_first_class,
-    available_seats_business_class,
-    price_business_class,
-    available_seats_economy_class,
-    price_economy_class,
+    departureTerminalId,
+    arrivalTerminalId,
+    flightType,
+    departureDateTime,
+    arrivalDateTime,
+    availableSeatsFirstClass,
+    priceFirstClass,
+    availableSeatsBusinessClass,
+    priceBusinessClass,
+    availableSeatsEconomyClass,
+    priceEconomyClass,
   } = req.body;
   try {
     const flight = await adminService.addFlight(
-      departure_terminal_id,
-      arrival_terminal_id,
-      flight_type,
-      departure_date_time,
-      arrival_date_time,
-      available_seats_first_class,
-      price_first_class,
-      available_seats_business_class,
-      price_business_class,
-      available_seats_economy_class,
-      price_economy_class
+      departureTerminalId,
+      arrivalTerminalId,
+      flightType,
+      departureDateTime,
+      arrivalDateTime,
+      availableSeatsFirstClass,
+      priceFirstClass,
+      availableSeatsBusinessClass,
+      priceBusinessClass,
+      availableSeatsEconomyClass,
+      priceEconomyClass
     );
 
     return res.status(201).json(flight);

@@ -18,14 +18,14 @@ export const authSerice = {
   },
 
   addPassenger: async (
-    first_name: string,
-    last_name: string,
+    firstName: string,
+    lastName: string,
     email: string,
     password: string
   ): Promise<any> => {
     const result = await pool.query(
       "INSERT INTO passenger (first_name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING *",
-      [first_name, last_name, email, password]
+      [firstName, lastName, email, password]
     );
     return result.rows[0];
   },
