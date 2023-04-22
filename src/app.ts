@@ -7,6 +7,7 @@ import connectRedis from "connect-redis";
 import "./config/db";
 import { router as authRouter } from "./auth/routes/auth.route";
 import { router as adminRouter } from "./admin/routes/admin.route";
+import { router as bookingRouter } from "./booking/routes/booking.route";
 
 declare module "express-session" {
   export interface SessionData {
@@ -45,5 +46,6 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api/v1", authRouter);
 app.use("/api/v1", adminRouter);
+app.use("/api/v1", bookingRouter);
 
 export default app;

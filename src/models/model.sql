@@ -61,8 +61,8 @@ CREATE TABLE
 CREATE TABLE
     IF NOT EXISTS booking(
         id SERIAL PRIMARY KEY,
-        flight_id INTEGER NOT NULL,
-        passenger_id INTEGER NOT NULL,
+        flight_id INTEGER,
+        passenger_id INTEGER,
         flight_class class_type NOT NULL,
         number_of_seats INTEGER NOT NULL,
         seat_number VARCHAR(20) UNIQUE NOT NULL,
@@ -75,8 +75,8 @@ CREATE TABLE
 CREATE TABLE
     IF NOT EXISTS payment(
         id SERIAL PRIMARY KEY,
-        booking_id INTEGER NOT NULL,
-        passenger_id INTEGER NOT NULL,
+        booking_id INTEGER,
+        passenger_id INTEGER,
         payment_method payment_type NOT NULL,
         amount INTEGER NOT NULL,
         payment_status status_type NOT NULL DEFAULT 'in-progress',
