@@ -4,10 +4,11 @@ import helmet from "helmet";
 import redisClient from "./config/redis";
 import session from "express-session";
 import connectRedis from "connect-redis";
-import "./config/db";
+import pool from "./config/db";
 import { router as authRouter } from "./auth/routes/auth.route";
 import { router as adminRouter } from "./admin/routes/admin.route";
 import { router as bookingRouter } from "./booking/routes/booking.route";
+import { router as paymentRouter } from "./payment/routes/payment.route";
 
 declare module "express-session" {
   export interface SessionData {
@@ -37,6 +38,15 @@ app.use(
     },
   })
 );
+
+pool.query("SELECT NOW()", (err, res) => {
+  if (err) {
+    console.error("Error executing query", err.stack);
+  } else {
+    console.log("Database Connected, Current timestamp:", res.rows[0].now);
+  }
+});
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -47,5 +57,6 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/v1", authRouter);
 app.use("/api/v1", adminRouter);
 app.use("/api/v1", bookingRouter);
+app.use("/api/v1", paymentRouter);
 
 export default app;

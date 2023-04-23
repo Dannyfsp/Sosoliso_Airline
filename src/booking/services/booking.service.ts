@@ -36,4 +36,12 @@ export const bookingService = {
     );
     return result.rows[0];
   },
+
+  findBooking: async (passengerId: number) => {
+    const result = await pool.query(
+      "SELECT * FROM booking WHERE passenger_id = $1",
+      [passengerId]
+    );
+    return result.rows[0];
+  },
 };

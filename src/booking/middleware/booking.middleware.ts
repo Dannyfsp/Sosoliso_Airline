@@ -53,6 +53,7 @@ export const validateBooking = async (
     return res
       .status(400)
       .json({ message: "seat number is required and a string" });
+
   if (seatNumber) {
     if (flightClass === "first-class") {
       if (!/^[1-3][AB]$/.test(seatNumber)) {
@@ -76,5 +77,6 @@ export const validateBooking = async (
       }
     }
   }
+
   next();
 };

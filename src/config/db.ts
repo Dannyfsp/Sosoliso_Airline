@@ -9,6 +9,4 @@ const pool: Pool = new Pool({
   port: Number(process.env.DB_PORT),
 });
 
-console.log("connected to postgreSQL successfully");
-
 export default pool;

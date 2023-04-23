@@ -23,7 +23,7 @@ export const bookFlight = async (req: Request, res: Response) => {
     if (seatExist)
       return res.status(400).json({ message: "oops 😥😥 seat already taken" });
 
-    const book = await bookingService.addBooking(
+    const data = await bookingService.addBooking(
       flightId,
       passengerId,
       flightClass,
@@ -49,7 +49,21 @@ export const bookFlight = async (req: Request, res: Response) => {
 
     return res
       .status(201)
-      .json({ message: "flight booked successfully", book });
+      .json({ message: "flight booked successfully", data });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+export const getBooking = async (req: Request, res: Response) => {
+  const passengerId = (req as IGetPassengerAuth).passenger.id;
+  try {
+    const data = await bookingService.findBooking(passengerId);
+    if (!data)
+      return res
+        .status(400)
+        .json({ message: "You have not booked any flight yet" });
+    return res.status(200).json(data);
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }

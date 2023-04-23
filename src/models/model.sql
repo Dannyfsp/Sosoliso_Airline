@@ -1,7 +1,5 @@
 CREATE TYPE role_type AS ENUM ('passenger', 'admin');
 
-CREATE TYPE payment_type AS ENUM ('transfer', 'card');
-
 CREATE TYPE status_type AS ENUM ('failed', 'in-progress', 'success');
 
 CREATE TYPE class_type AS ENUM (
@@ -19,7 +17,7 @@ CREATE TABLE
         email VARCHAR(100) UNIQUE NOT NULL,
         password TEXT,
         roles role_type NOT NULL DEFAULT 'passenger',
-        created_at DATE NOT NULL DEFAULT now()
+        created_at DATE NOT NULL DEFAULT NOW()
     );
 
 CREATE TABLE
@@ -61,12 +59,12 @@ CREATE TABLE
 CREATE TABLE
     IF NOT EXISTS booking(
         id SERIAL PRIMARY KEY,
-        flight_id INTEGER,
-        passenger_id INTEGER,
+        flight_id INTEGER NOT NULL,
+        passenger_id INTEGER NOT NULL,
         flight_class class_type NOT NULL,
         number_of_seats INTEGER NOT NULL,
         seat_number VARCHAR(20) UNIQUE NOT NULL,
-        date_time TIMESTAMP NOT NULL DEFAULT now(),
+        date_time TIMESTAMP NOT NULL DEFAULT NOW(),
         is_cancelled BOOLEAN NOT NULL DEFAULT false,
         FOREIGN KEY (flight_id) REFERENCES flight(id),
         FOREIGN KEY (passenger_id) REFERENCES passenger(id)
@@ -75,12 +73,12 @@ CREATE TABLE
 CREATE TABLE
     IF NOT EXISTS payment(
         id SERIAL PRIMARY KEY,
-        booking_id INTEGER,
-        passenger_id INTEGER,
-        payment_method payment_type NOT NULL,
+        booking_id INTEGER NOT NULL,
+        passenger_id INTEGER NOT NULL,
+        payment_ref VARCHAR(50) NOT NULL,
         amount INTEGER NOT NULL,
         payment_status status_type NOT NULL DEFAULT 'in-progress',
-        payment_date_time TIMESTAMP NOT NULL DEFAULT now(),
+        payment_date_time TIMESTAMP NOT NULL DEFAULT NOW(),
         FOREIGN KEY (booking_id) REFERENCES booking(id),
         FOREIGN KEY (passenger_id) REFERENCES passenger(id)
     )
