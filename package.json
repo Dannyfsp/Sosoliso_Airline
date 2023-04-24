@@ -2,7 +2,7 @@
   "name": "sosoliso_airline",
   "version": "1.0.0",
   "description": "A NodeJS application using TypeScript",
-  "main": "server.js",
+  "main": "dist/server.js",
   "scripts": {
     "dev": "nodemon src/server.ts",
     "start": "node dist/server.js",
