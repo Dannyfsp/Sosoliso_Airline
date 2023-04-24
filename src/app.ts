@@ -44,7 +44,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Welcome to Sosoliso");
+  res.redirect("https://github.com/Dannyfsp/Sosoliso_Airline#readme");
 });
 
 app.get("/welcome", (req: Request, res: Response) => {
