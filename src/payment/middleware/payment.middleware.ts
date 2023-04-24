@@ -21,7 +21,7 @@ export const paymentMiddleware = async (
       Number(bookingId)
     );
 
-    if (!amount || typeof amount !== "string")
+    if (!amount || typeof amount !== "number")
       return res
         .status(400)
         .json({ message: "amount is required and must be a number" });
