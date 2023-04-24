@@ -9,4 +9,12 @@ const pool: Pool = new Pool({
   port: Number(process.env.DB_PORT),
 });
 
+pool.query("SELECT NOW()", (err, res) => {
+  if (err) {
+    console.error("Error executing query", err.stack);
+  } else {
+    console.log("Database Connected, Current timestamp:", res.rows[0].now);
+  }
+});
+
 export default pool;

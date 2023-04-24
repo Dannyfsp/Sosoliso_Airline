@@ -1,10 +1,10 @@
 import pool from "../../config/db";
 
 export const paymentService = {
-  getFlightId: async (passengerId: number) => {
+  getFlightId: async (passengerId: number, bookingId: number) => {
     const result = await pool.query(
-      "select flight_id, flight_class FROM booking WHERE passenger_id = $1",
-      [passengerId]
+      "SELECT flight_id, flight_class FROM booking WHERE passenger_id = $1 AND id = $2",
+      [passengerId, bookingId]
     );
     return result.rows[0];
   },
@@ -31,15 +31,30 @@ export const paymentService = {
     return result.rows[0];
   },
 
-  getPaymentInfo: async (passengerId: number) => {
+  getPaymentInfo: async (passengerId: number, bookingId: number) => {
     const result = await pool.query(
-      "SELECT * FROM payment WHERE passenger_id = $1",
-      [passengerId]
+      "SELECT * FROM payment WHERE passenger_id = $1 AND booking_id = $2",
+      [passengerId, bookingId]
     );
     return result.rows[0];
   },
 
-  updatePaymentStatus: async (status: string) => {
-    return await pool.query("UPDATE payment SET payment_status = $1", [status]);
+  updatePaymentStatus: async (
+    status: string,
+    passengerId: number,
+    bookingId: number
+  ) => {
+    return await pool.query(
+      "UPDATE payment SET payment_status = $1 WHERE passenger_id = $2 AND booking_id = $3",
+      [status, passengerId, bookingId]
+    );
+  },
+
+  confirmBookingId: async (bookingId: number, passengerId: number) => {
+    const result = await pool.query(
+      "SELECT * FROM booking WHERE id = $1 AND passenger_id = $2",
+      [bookingId, passengerId]
+    );
+    return result.rows[0];
   },
 };

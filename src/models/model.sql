@@ -63,7 +63,7 @@ CREATE TABLE
         passenger_id INTEGER NOT NULL,
         flight_class class_type NOT NULL,
         number_of_seats INTEGER NOT NULL,
-        seat_number VARCHAR(20) UNIQUE NOT NULL,
+        seat_number VARCHAR(20) NOT NULL,
         date_time TIMESTAMP NOT NULL DEFAULT NOW(),
         is_cancelled BOOLEAN NOT NULL DEFAULT false,
         FOREIGN KEY (flight_id) REFERENCES flight(id),

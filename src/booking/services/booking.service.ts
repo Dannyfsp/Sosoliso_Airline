@@ -24,9 +24,14 @@ export const bookingService = {
     return result.rows[0];
   },
 
-  updateClassSeats: async (classType: string, numberOfSeats: number) => {
+  updateClassSeats: async (
+    classType: string,
+    numberOfSeats: number,
+    flightId: number
+  ) => {
     return await pool.query(
-      `UPDATE flight SET ${classType} = ${classType} - ${numberOfSeats}`
+      `UPDATE flight SET ${classType} = ${classType} - ${numberOfSeats} WHERE id = $1`,
+      [flightId]
     );
   },
 
@@ -42,6 +47,13 @@ export const bookingService = {
       "SELECT * FROM booking WHERE passenger_id = $1",
       [passengerId]
     );
+    return result.rows[0];
+  },
+
+  bookingStatus: async (passengerId: number, bookingId: number) => {
+    const sqlQuery: string = `SELECT b.*, pa.amount, pa.payment_ref, pa.payment_status FROM payment pa 
+    JOIN booking b ON pa.booking_id = b.id WHERE b.passenger_id = $1 AND b.id = $2`;
+    const result = await pool.query(sqlQuery, [passengerId, bookingId]);
     return result.rows[0];
   },
 };

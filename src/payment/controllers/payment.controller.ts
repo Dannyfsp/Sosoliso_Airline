@@ -3,45 +3,29 @@ import { IGetPassengerAuth } from "../../auth/interface/auth.interface";
 import { PaystackInitializeRequest } from "../interface/payment.interface";
 import { initializeTransaction, verifyTransaction } from "../../utils/axios";
 import { paymentService } from "../services/payment.service";
+import generateReceiptAndSendEmail from "../../utils/send.receipt";
+import { bookingService } from "../../booking/services/booking.service";
 
 export const payment = async (req: Request, res: Response) => {
-  const { email, id } = (req as IGetPassengerAuth).passenger;
+  const user = (req as IGetPassengerAuth).passenger;
   let { amount } = req.body;
   let { bookingId } = req.params;
   try {
-    const getFlightClass = await paymentService.getFlightId(id);
-
-    console.log(getFlightClass);
-
-    const checkAmount: number = Number(amount);
-
-    const priceOfFlight = await paymentService.getPrice(
-      getFlightClass.flight_id,
-      Number(bookingId)
+    const confirmBooking = await paymentService.confirmBookingId(
+      Number(bookingId),
+      user.id
     );
-    console.log("Does it work here");
-
-    if (getFlightClass.flight_class === "first-class") {
-      if (priceOfFlight.price_first_class !== checkAmount)
-        return res.status(400).json({ message: "amount not equals to price" });
-    }
-
-    if (getFlightClass.flight_class === "business-class") {
-      if (priceOfFlight.price_business_class !== checkAmount)
-        return res.status(400).json({ message: "amount not equals to price" });
-    }
-
-    if (getFlightClass.flight_class === "economy-class") {
-      if (priceOfFlight.price_economy_class !== checkAmount)
-        return res.status(400).json({ message: "amount not equals to price" });
-    }
+    if (!confirmBooking)
+      return res
+        .status(200)
+        .json({ message: "Sorry the bookingId seems to be incorrect" });
 
     amount = amount + "00";
 
     const request: PaystackInitializeRequest = {
-      email,
-      amount, // amount in kobo (i.e. 50000 kobo = 500 naira)
-      callback_url: "http://localhost:1010",
+      email: user.email,
+      amount,
+      callback_url: "http://localhost:1010/welcome",
       metadata: {
         booking_id: bookingId,
       },
@@ -49,13 +33,11 @@ export const payment = async (req: Request, res: Response) => {
 
     const response = await initializeTransaction(request);
 
-    console.log(response.data);
-
     const paymentData = await paymentService.addPayment(
       Number(bookingId),
-      id,
+      user.id,
       response.data.data.reference,
-      checkAmount
+      Number(amount)
     );
 
     return res
@@ -69,17 +51,52 @@ export const payment = async (req: Request, res: Response) => {
 };
 
 export const verifyPayment = async (req: Request, res: Response) => {
-  const { id } = (req as IGetPassengerAuth).passenger;
+  const user = (req as IGetPassengerAuth).passenger;
+  const { bookingId } = req.params;
   try {
-    const paymentInfo = await paymentService.getPaymentInfo(id);
+    const confirmBooking = await paymentService.confirmBookingId(
+      Number(bookingId),
+      user.id
+    );
+    console.log(1);
 
-    const response = await verifyTransaction(paymentInfo.payment_ref);
+    if (!confirmBooking)
+      return res
+        .status(200)
+        .json({ message: "Sorry the bookingId seems to be incorrect" });
+
+    const status = await bookingService.bookingStatus(
+      user.id,
+      Number(bookingId)
+    );
+
+    const response = await verifyTransaction(status.payment_ref);
 
     if (response.data.data.status === "success") {
-      await paymentService.updatePaymentStatus("success");
-      return res.status(200).json({ message: "payment was successful 😊😊😊" });
+      await paymentService.updatePaymentStatus(
+        "success",
+        user.id,
+        Number(bookingId)
+      );
+
+      await generateReceiptAndSendEmail(
+        user.email,
+        user.first_name,
+        status.amount,
+        status.payment_ref,
+        status.flight_class,
+        status.seat_number
+      );
+      return res.status(200).json({
+        message:
+          "payment was successful 😊😊😊, please check your email for receipt",
+      });
     } else {
-      await paymentService.updatePaymentStatus("failed");
+      await paymentService.updatePaymentStatus(
+        "failed",
+        user.id,
+        Number(bookingId)
+      );
       return res
         .status(400)
         .json({ message: "payment was unsuccessful 😥😥😥" });

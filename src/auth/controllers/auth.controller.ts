@@ -104,3 +104,18 @@ export const allFlights = async (req: Request, res: Response) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const getAFlight = async (req: Request, res: Response) => {
+  const flightId = req.params.flightId;
+
+  try {
+    const result = await authSerice.findByPK(Number(flightId), "flight");
+    if (!result)
+      return res
+        .status(400)
+        .json({ message: `flight with the id ${flightId} does not exist` });
+    return res.status(200).json(result);
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};

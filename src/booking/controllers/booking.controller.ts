@@ -20,6 +20,7 @@ export const bookFlight = async (req: Request, res: Response) => {
       seatNumber,
       flightClass
     );
+
     if (seatExist)
       return res.status(400).json({ message: "oops 😥😥 seat already taken" });
 
@@ -34,17 +35,20 @@ export const bookFlight = async (req: Request, res: Response) => {
     if (flightClass === "first-class")
       await bookingService.updateClassSeats(
         "available_seats_first_class",
-        numberOfSeats
+        numberOfSeats,
+        flightId
       );
     if (flightClass === "business-class")
       await bookingService.updateClassSeats(
         "available_seats_business_class",
-        numberOfSeats
+        numberOfSeats,
+        flightId
       );
     if (flightClass === "economy-class")
       await bookingService.updateClassSeats(
         "available_seats_economy_class",
-        numberOfSeats
+        numberOfSeats,
+        flightId
       );
 
     return res
@@ -56,9 +60,10 @@ export const bookFlight = async (req: Request, res: Response) => {
 };
 
 export const getBooking = async (req: Request, res: Response) => {
-  const passengerId = (req as IGetPassengerAuth).passenger.id;
+  const user = (req as IGetPassengerAuth).passenger;
+  const { bookingId } = req.params;
   try {
-    const data = await bookingService.findBooking(passengerId);
+    const data = await bookingService.bookingStatus(user.id, Number(bookingId));
     if (!data)
       return res
         .status(400)
