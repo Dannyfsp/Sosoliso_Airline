@@ -107,7 +107,6 @@ export const allFlights = async (req: Request, res: Response) => {
 
 export const getAFlight = async (req: Request, res: Response) => {
   const flightId = req.params.flightId;
-
   try {
     const result = await authSerice.findByPK(Number(flightId), "flight");
     if (!result)

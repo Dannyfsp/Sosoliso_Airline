@@ -19,13 +19,13 @@ export const payment = async (req: Request, res: Response) => {
       return res
         .status(200)
         .json({ message: "Sorry the bookingId seems to be incorrect" });
-
+    const realAmount = amount;
     amount = amount + "00";
 
     const request: PaystackInitializeRequest = {
       email: user.email,
       amount,
-      callback_url: "http://localhost:1010/welcome",
+      callback_url: "https://sosoliso.herokuapp.com/welcome",
       metadata: {
         booking_id: bookingId,
       },
@@ -37,12 +37,14 @@ export const payment = async (req: Request, res: Response) => {
       Number(bookingId),
       user.id,
       response.data.data.reference,
-      Number(amount)
+      realAmount
     );
 
-    return res
-      .status(200)
-      .json({ auth_url: response.data.data.authorization_url, paymentData });
+    return res.status(200).json({
+      auth_url: response.data.data.authorization_url,
+      paymentData,
+      bookingId,
+    });
   } catch (error: any) {
     console.log(error);
 
@@ -58,7 +60,6 @@ export const verifyPayment = async (req: Request, res: Response) => {
       Number(bookingId),
       user.id
     );
-    console.log(1);
 
     if (!confirmBooking)
       return res

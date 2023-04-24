@@ -50,7 +50,9 @@ app.get("/", (req: Request, res: Response) => {
 app.get("/welcome", (req: Request, res: Response) => {
   res
     .status(200)
-    .send("Thank you for your payment 😊, please check your email for receipt");
+    .send(
+      "Sosoliso officially welcomes you... Thank you for your payment 😊😊😊"
+    );
 });
 
 app.use("/api/v1", authRouter);
@@ -58,7 +60,7 @@ app.use("/api/v1", adminRouter);
 app.use("/api/v1", bookingRouter);
 app.use("/api/v1", paymentRouter);
 
-app.use("*", (req: Request, res: Response) => {
+app.all("*", (req: Request, res: Response) => {
   return res
     .status(404)
     .json({ message: "oops... The page you're looking for does not exist" });
