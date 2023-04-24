@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.router = void 0;
+const express_1 = require("express");
+const admin_controller_1 = require("../controllers/admin.controller");
+const validate_1 = require("../middleware/validate");
+const admin_middleware_1 = require("../middleware/admin.middleware");
+const auth_1 = require("../../auth/middleware/auth");
+exports.router = (0, express_1.Router)();
+exports.router.get("/admin/booking/:id", auth_1.authMiddleware, admin_middleware_1.adminAuth, admin_controller_1.getBooking);
+exports.router.get("/admin/bookings", auth_1.authMiddleware, admin_middleware_1.adminAuth, admin_controller_1.getAllBookings);
+exports.router.get("/admin/flight/:id", auth_1.authMiddleware, admin_middleware_1.adminAuth, admin_controller_1.getFlight);
+exports.router.get("/admin/passengers", auth_1.authMiddleware, admin_middleware_1.adminAuth, admin_controller_1.getAllPassengers);
+exports.router.get("/admin/cancelled", auth_1.authMiddleware, admin_middleware_1.adminAuth, admin_controller_1.getAllCancelledFlight);
+exports.router.post("/admin/flight", auth_1.authMiddleware, admin_middleware_1.adminAuth, validate_1.validateMiddleware, admin_controller_1.addFlight);
