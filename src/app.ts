@@ -47,7 +47,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to Sosoliso");
 });
 
-app.get("/welcome", signUpAndLoginLimiter, (req: Request, res: Response) => {
+app.get("/welcome", (req: Request, res: Response) => {
   res
     .status(200)
     .send("Thank you for your payment 😊, please check your email for receipt");
