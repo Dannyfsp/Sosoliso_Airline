@@ -93,7 +93,7 @@ export const getFlight = async (
 ): Promise<Response> => {
   const id: number = Number(req.params.id);
   try {
-    const flight = await authSerice.findByPK(id, "flight");
+    const flight = await adminService.oneFlight(id);
     if (!flight)
       return res
         .status(400)

@@ -57,4 +57,15 @@ export const paymentService = {
     );
     return result.rows[0];
   },
+
+  getBookingAndPaymentStatus: async (
+    passengerId: number,
+    bookingId: number
+  ) => {
+    const result = await pool.query(
+      "select * from payment where passenger_id = $1 and booking_id = $2 and payment_status = 'success'",
+      [passengerId, bookingId]
+    );
+    return result.rows[0];
+  },
 };

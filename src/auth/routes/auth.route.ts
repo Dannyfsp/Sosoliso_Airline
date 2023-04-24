@@ -15,5 +15,10 @@ export const router: Router = Router();
 router.get("/auth/flight", authMiddleware, allFlights);
 router.get("/auth/flight/:flightId", authMiddleware, getAFlight);
 router.post("/auth/signup", registerMiddleware, passengerSignUp);
-router.post("/auth/signin", loginMiddleware, passengerSignIn);
+router.post(
+  "/auth/signin",
+  signUpAndLoginLimiter,
+  loginMiddleware,
+  passengerSignIn
+);
 router.delete("/auth/logout", authMiddleware, passengerLogout);

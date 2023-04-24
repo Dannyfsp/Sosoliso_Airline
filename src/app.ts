@@ -4,12 +4,10 @@ import helmet from "helmet";
 import redisClient from "./config/redis";
 import session from "express-session";
 import connectRedis from "connect-redis";
-import pool from "./config/db";
 import { router as authRouter } from "./auth/routes/auth.route";
 import { router as adminRouter } from "./admin/routes/admin.route";
 import { router as bookingRouter } from "./booking/routes/booking.route";
 import { router as paymentRouter } from "./payment/routes/payment.route";
-import signUpAndLoginLimiter from "./utils/rateLimiter";
 
 declare module "express-session" {
   export interface SessionData {

@@ -92,13 +92,13 @@ export const allFlights = async (req: Request, res: Response) => {
   const offset: number = (page - 1) * limit;
   try {
     if (page) {
-      const pagination = await authSerice.allFlight(limit, offset);
+      const pagination = await adminService.getAllFlight(limit, offset);
       if (pagination.length <= 0)
         return res.status(400).json({ message: "No flights for this page" });
       else return res.status(200).json(pagination);
     }
 
-    const data = await adminService.getAll("flight");
+    const data = await adminService.getAllFlight();
     return res.status(200).json(data);
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
@@ -106,9 +106,9 @@ export const allFlights = async (req: Request, res: Response) => {
 };
 
 export const getAFlight = async (req: Request, res: Response) => {
-  const flightId = req.params.flightId;
+  const flightId: number = Number(req.params.flightId);
   try {
-    const result = await authSerice.findByPK(Number(flightId), "flight");
+    const result = await adminService.oneFlight(flightId);
     if (!result)
       return res
         .status(400)

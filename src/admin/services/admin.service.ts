@@ -45,7 +45,7 @@ export const adminService = {
     return result.rows[0];
   },
   getAll: async (model: string) => {
-    const result = await pool.query(`SELECT * FROM ${model}`);
+    const result = await pool.query(`SELECT * FROM $1`, [model]);
     return result.rows;
   },
   getCancelledFlight: async () => {
@@ -53,5 +53,56 @@ export const adminService = {
       "SELECT * FROM booking WHERE is_cancelled = true"
     );
     return result.rows;
+  },
+  getAllFlight: async (limit: number = 20, offset: number = 0) => {
+    const sqlQuery = `SELECT f.id, 
+    f.flight_type, 
+    f.available_seats_first_class, 
+    f.price_first_class, 
+    f.available_seats_business_class, 
+    f.price_business_class, 
+    f.available_seats_economy_class, 
+    f.price_economy_class, 
+    dt.airport_name as departure_airport, 
+    dt.city as departure_city, 
+    dt.country as departure_country, 
+    ar.airport_name as arrival_airport, 
+    ar.city as arrival_city, 
+    ar.country as arrival_country, 
+    f.departure_date_time, 
+    f.arrival_date_time 
+    FROM flight f 
+      JOIN departure_terminal dt 
+        ON dt.id = f.departure_terminal_id 
+      JOIN arrival_terminal ar 
+        ON ar.id = f.arrival_terminal_id LIMIT $1 OFFSET $2`;
+    const result = await pool.query(sqlQuery, [limit, offset]);
+    return result.rows;
+  },
+
+  oneFlight: async (flightId: number) => {
+    const sqlQuery = `SELECT f.id, 
+    f.flight_type, 
+    f.available_seats_first_class, 
+    f.price_first_class, 
+    f.available_seats_business_class, 
+    f.price_business_class, 
+    f.available_seats_economy_class, 
+    f.price_economy_class, 
+    dt.airport_name as departure_airport, 
+    dt.city as departure_city, 
+    dt.country as departure_country, 
+    ar.airport_name as arrival_airport, 
+    ar.city as arrival_city, 
+    ar.country as arrival_country, 
+    f.departure_date_time, 
+    f.arrival_date_time 
+    FROM flight f 
+      JOIN departure_terminal dt 
+        ON dt.id = f.departure_terminal_id 
+      JOIN arrival_terminal ar 
+        ON ar.id = f.arrival_terminal_id WHERE f.id = $1`;
+    const result = await pool.query(sqlQuery, [flightId]);
+    return result.rows[0];
   },
 };

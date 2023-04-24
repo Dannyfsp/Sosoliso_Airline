@@ -19,8 +19,19 @@ export const payment = async (req: Request, res: Response) => {
       return res
         .status(200)
         .json({ message: "Sorry the bookingId seems to be incorrect" });
+
+    const checkForPayment = await paymentService.getBookingAndPaymentStatus(
+      user.id,
+      Number(bookingId)
+    );
+    if (checkForPayment)
+      return res.status(400).json({
+        message: `${user.first_name}, you've have already made payment for this booking id ${bookingId}`,
+      });
     const realAmount = amount;
-    amount = amount + "00";
+    let total = realAmount * confirmBooking.number_of_seats;
+
+    amount = total.toString() + "00";
 
     const request: PaystackInitializeRequest = {
       email: user.email,
@@ -37,7 +48,7 @@ export const payment = async (req: Request, res: Response) => {
       Number(bookingId),
       user.id,
       response.data.data.reference,
-      realAmount
+      total
     );
 
     return res.status(200).json({

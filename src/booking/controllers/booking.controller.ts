@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { IGetPassengerAuth } from "../../auth/interface/auth.interface";
 import { authSerice } from "../../auth/services/auth.service";
 import { bookingService } from "../services/booking.service";
+import { paymentService } from "../../payment/services/payment.service";
 
 export const bookFlight = async (req: Request, res: Response) => {
   const flightId: number = Number(req.params.flightId);
@@ -65,10 +66,28 @@ export const getBooking = async (req: Request, res: Response) => {
   try {
     const data = await bookingService.bookingStatus(user.id, Number(bookingId));
     if (!data)
-      return res
-        .status(400)
-        .json({ message: "You have not booked any flight yet" });
+      return res.status(400).json({
+        message: `There seems to be an issue with booking id ${bookingId}`,
+      });
     return res.status(200).json(data);
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+export const cancelFlight = async (req: Request, res: Response) => {
+  const user = (req as IGetPassengerAuth).passenger;
+  const bookingId: number = Number(req.params.bookingId);
+  try {
+    const checkBooking = await bookingService.findBooking(user.id, bookingId);
+    if (!checkBooking)
+      return res.status(400).json({
+        message: `booking id ${bookingId} doest not relate to this passenger`,
+      });
+
+    await bookingService.cancelBooking(user.id, bookingId);
+
+    return res.status(200).json({ message: "booking cancelled successfully" });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }

@@ -3,7 +3,8 @@ import { IPassenger } from "../interface/auth.interface";
 
 export const authSerice = {
   findByPK: async (id: number, model: string): Promise<IPassenger | any> => {
-    const result = await pool.query(`SELECT * FROM ${model} WHERE id = $1`, [
+    const result = await pool.query(`SELECT * FROM $1 WHERE id = $2`, [
+      model,
       id,
     ]);
     return result.rows[0];
@@ -28,12 +29,5 @@ export const authSerice = {
       [firstName, lastName, email, password]
     );
     return result.rows[0];
-  },
-
-  allFlight: async (limit: number, offset: number) => {
-    const result = await pool.query(
-      `SELECT * FROM flight LIMIT ${limit} OFFSET ${offset}`
-    );
-    return result.rows;
   },
 };
