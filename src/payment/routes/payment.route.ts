@@ -7,8 +7,8 @@ export const router: Router = Router();
 
 router.post(
   "/flight/payment/:bookingId",
-  paymentMiddleware,
   authMiddleware,
+  paymentMiddleware,
   payment
 );
 router.get("/flight/payment/verify/:bookingId", authMiddleware, verifyPayment);
