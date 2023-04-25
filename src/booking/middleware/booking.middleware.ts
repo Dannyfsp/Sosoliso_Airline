@@ -15,10 +15,14 @@ export const validateBooking = async (
         "flight class is required and can either be first-class, business-class, economy-class",
     });
 
+  const firstClass: string = "available_seats_first_class";
+  const businessClass: string = "available_seats_business_class";
+  const economyClass: string = "available_seats_business_class";
+
   if (flightClass) {
     if (flightClass === "first-class") {
       const result = await bookingService.flightAvailability(
-        "available_seats_first_class",
+        firstClass,
         flightId
       );
       if (result)
@@ -28,7 +32,7 @@ export const validateBooking = async (
     }
     if (flightClass === "business-class") {
       const result = await bookingService.flightAvailability(
-        "available_seats_business_class",
+        businessClass,
         flightId
       );
       if (result)
@@ -38,7 +42,7 @@ export const validateBooking = async (
     }
     if (flightClass === "economy-class") {
       const result = await bookingService.flightAvailability(
-        "available_seats_economy_class",
+        economyClass,
         flightId
       );
       if (result)
