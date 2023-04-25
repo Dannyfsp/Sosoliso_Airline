@@ -78,7 +78,6 @@ export const getBooking = async (req: Request, res: Response) => {
 export const cancelFlight = async (req: Request, res: Response) => {
   const user = (req as IGetPassengerAuth).passenger;
   const bookingId: number = Number(req.params.bookingId);
-  const cancelFlight: boolean = req.body.cancel;
   try {
     const checkBooking = await bookingService.findBooking(user.id, bookingId);
     if (!checkBooking)
@@ -86,7 +85,7 @@ export const cancelFlight = async (req: Request, res: Response) => {
         message: `booking id ${bookingId} doest not relate to this passenger`,
       });
 
-    await bookingService.cancelBooking(user.id, bookingId, cancelFlight);
+    await bookingService.cancelBooking(user.id, bookingId);
 
     return res.status(200).json({ message: "booking cancelled successfully" });
   } catch (error: any) {

@@ -62,14 +62,10 @@ export const bookingService = {
     return result.rows[0];
   },
 
-  cancelBooking: async (
-    passengerId: number,
-    bookingId: number,
-    isCancelled: boolean
-  ) => {
+  cancelBooking: async (passengerId: number, bookingId: number) => {
     return await pool.query(
-      "UPDATE booking SET is_cancelled = $3 WHERE passenger_id = $1 AND id = $2",
-      [passengerId, bookingId, isCancelled]
+      "UPDATE booking SET is_cancelled = true WHERE passenger_id = $1 AND id = $2",
+      [passengerId, bookingId]
     );
   },
 };

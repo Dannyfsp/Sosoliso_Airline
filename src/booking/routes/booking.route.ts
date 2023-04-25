@@ -10,7 +10,7 @@ import {
 export const router: Router = Router();
 
 router.get("/flight/booking/:bookingId", authMiddleware, getBooking);
-router.patch("/flight/booking/:bookingId", authMiddleware, cancelFlight);
+router.get("/flight/booking/:bookingId", authMiddleware, cancelFlight);
 router.post(
   "/flight/booking/:flightId",
   authMiddleware,
