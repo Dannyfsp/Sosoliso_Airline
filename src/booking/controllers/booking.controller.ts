@@ -80,12 +80,15 @@ export const cancelFlight = async (req: Request, res: Response) => {
   const bookingId: number = Number(req.params.bookingId);
   try {
     const checkBooking = await bookingService.findBooking(user.id, bookingId);
+    console.log(1);
+
     if (!checkBooking)
       return res.status(400).json({
         message: `booking id ${bookingId} doest not relate to this passenger`,
       });
 
     await bookingService.cancelBooking(user.id, bookingId);
+    console.log("did it get here");
 
     return res.status(200).json({ message: "booking cancelled successfully" });
   } catch (error: any) {
