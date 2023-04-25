@@ -44,8 +44,14 @@ export const adminService = {
     const result = await pool.query(queries, values);
     return result.rows[0];
   },
-  getAll: async (model: string) => {
-    const result = await pool.query(`SELECT * FROM $1`, [model]);
+
+  getAllBooking: async () => {
+    const result = await pool.query("SELECT * FROM booking");
+    return result.rows;
+  },
+
+  getAllPassenger: async () => {
+    const result = await pool.query("SELECT * FROM passenger");
     return result.rows;
   },
   getCancelledFlight: async () => {

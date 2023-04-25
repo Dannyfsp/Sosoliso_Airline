@@ -2,9 +2,15 @@ import pool from "../../config/db";
 import { IPassenger } from "../interface/auth.interface";
 
 export const authSerice = {
-  findByPK: async (id: number, model: string): Promise<IPassenger | any> => {
-    const result = await pool.query(`SELECT * FROM $1 WHERE id = $2`, [
-      model,
+  findPassengerByPK: async (id: number): Promise<IPassenger | any> => {
+    const result = await pool.query("SELECT * FROM passenger WHERE id = $1", [
+      id,
+    ]);
+    return result.rows[0];
+  },
+
+  findBookingByPk: async (id: number) => {
+    const result = await pool.query("SELECT * FROM booking WHERE id = $1", [
       id,
     ]);
     return result.rows[0];

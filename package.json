@@ -11,7 +11,9 @@
     "watch-ts": "tsc -w",
     "deploy": "git add . && git commit -m \"Deploying to heroku\" && Heroku && git push heroku master"
 },
-"engines": { "node": "14.17.0" },
+"engines": { 
+  "node": "14.17.0" 
+},
 "type": "commonjs",
   "repository": {
     "type": "git",

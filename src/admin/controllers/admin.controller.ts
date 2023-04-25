@@ -47,7 +47,7 @@ export const getAllPassengers = async (
   res: Response
 ): Promise<IPassenger[] | any> => {
   try {
-    const passengers = await adminService.getAll("passenger");
+    const passengers = await adminService.getAllPassenger();
     if (passengers.length <= 0)
       return res.status(400).json({ message: "No passenger yet" });
 
@@ -62,7 +62,7 @@ export const getAllBookings = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const bookings = await adminService.getAll("booking");
+    const bookings = await adminService.getAllBooking();
     if (bookings.length <= 0)
       return res.status(400).json({ message: "No bookings yet" });
 
@@ -110,7 +110,7 @@ export const getBooking = async (
 ): Promise<Response> => {
   const id: number = Number(req.params.id);
   try {
-    const booking = await authSerice.findByPK(id, "booking");
+    const booking = await authSerice.findBookingByPk(id);
     if (!booking)
       return res
         .status(400)
