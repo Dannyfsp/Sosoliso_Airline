@@ -33,11 +33,10 @@ export const bookingService = {
     numberOfSeats: number,
     flightId: number
   ) => {
-    return await pool.query("UPDATE flight SET $1 = $1 - $2 WHERE id = $3", [
-      classType,
-      numberOfSeats,
-      flightId,
-    ]);
+    return await pool.query(
+      `UPDATE flight SET ${classType} = ${classType} - $1 WHERE id = $2`,
+      [numberOfSeats, flightId]
+    );
   },
 
   flightAvailability: async (classType: string, flightId: number) => {
