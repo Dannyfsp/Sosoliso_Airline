@@ -9,6 +9,11 @@ export const authSerice = {
     return result.rows[0];
   },
 
+  findFlightByPk: async (id: number) => {
+    const result = await pool.query("SELECT * FROM flight WHERE id = $1", [id]);
+    return result.rows[0];
+  },
+
   findBookingByPk: async (id: number) => {
     const result = await pool.query("SELECT * FROM booking WHERE id = $1", [
       id,

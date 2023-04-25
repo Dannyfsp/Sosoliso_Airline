@@ -9,7 +9,7 @@ export const bookFlight = async (req: Request, res: Response) => {
   const { flightClass, numberOfSeats, seatNumber } = req.body;
 
   try {
-    const flightIdExist = await authSerice.findByPK(flightId, "flight");
+    const flightIdExist = await authSerice.findFlightByPk(flightId);
 
     if (!flightIdExist)
       return res
