@@ -26,7 +26,7 @@ export const payment = async (req: Request, res: Response) => {
     );
     if (checkForPayment)
       return res.status(400).json({
-        message: `${user.first_name}, you've have already made payment for this booking id ${bookingId}`,
+        message: `Hello ${user.first_name}, you've have already made payment for this booking id`,
       });
     const realAmount = amount;
     let total = realAmount * confirmBooking.number_of_seats;
@@ -54,7 +54,6 @@ export const payment = async (req: Request, res: Response) => {
     return res.status(200).json({
       auth_url: response.data.data.authorization_url,
       paymentData,
-      bookingId,
     });
   } catch (error: any) {
     console.log(error);

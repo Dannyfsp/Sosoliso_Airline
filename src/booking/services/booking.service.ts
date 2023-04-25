@@ -37,9 +37,9 @@ export const bookingService = {
   },
 
   flightAvailability: async (classType: string) => {
-    const result = await pool.query(
-      `SELECT * FROM flight WHERE ${classType} = 0`
-    );
+    const result = await pool.query(`SELECT * FROM flight WHERE $1 = 0`, [
+      classType,
+    ]);
     return result.rows[0];
   },
 
@@ -58,10 +58,14 @@ export const bookingService = {
     return result.rows[0];
   },
 
-  cancelBooking: async (passengerId: number, bookingId: number) => {
+  cancelBooking: async (
+    passengerId: number,
+    bookingId: number,
+    isCancelled: boolean
+  ) => {
     return await pool.query(
-      `UPDATE booking SET is_cancelled = true WHERE passenger_id = $1 AND id = $2`,
-      [passengerId, bookingId]
+      `UPDATE booking SET is_cancelled = $3 WHERE passenger_id = $1 AND id = $2`,
+      [passengerId, bookingId, isCancelled]
     );
   },
 };

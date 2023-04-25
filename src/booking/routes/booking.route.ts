@@ -1,11 +1,16 @@
 import { Router } from "express";
 import { validateBooking } from "../middleware/booking.middleware";
 import { authMiddleware } from "../../auth/middleware/auth";
-import { bookFlight, getBooking } from "../controllers/booking.controller";
+import {
+  bookFlight,
+  cancelFlight,
+  getBooking,
+} from "../controllers/booking.controller";
 
 export const router: Router = Router();
 
 router.get("/flight/booking/:bookingId", authMiddleware, getBooking);
+router.patch("/flight/booking/:bookingId", authMiddleware, cancelFlight);
 router.post(
   "/flight/booking/:flightId",
   authMiddleware,
