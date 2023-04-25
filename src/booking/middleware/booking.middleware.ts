@@ -6,6 +6,7 @@ export const validateBooking = async (
   res: Response,
   next: NextFunction
 ) => {
+  const flightId: number = Number(req.params.flightId);
   const { flightClass, numberOfSeats, seatNumber } = req.body;
 
   if (!flightClass || !/^(first|business|economy)-class$/.test(flightClass))
@@ -17,7 +18,8 @@ export const validateBooking = async (
   if (flightClass) {
     if (flightClass === "first-class") {
       const result = await bookingService.flightAvailability(
-        "available_seats_first_class"
+        "available_seats_first_class",
+        flightId
       );
       if (result)
         return res
@@ -26,7 +28,8 @@ export const validateBooking = async (
     }
     if (flightClass === "business-class") {
       const result = await bookingService.flightAvailability(
-        "available_seats_business_class"
+        "available_seats_business_class",
+        flightId
       );
       if (result)
         return res
@@ -35,7 +38,8 @@ export const validateBooking = async (
     }
     if (flightClass === "economy-class") {
       const result = await bookingService.flightAvailability(
-        "available_seats_economy_class"
+        "available_seats_economy_class",
+        flightId
       );
       if (result)
         return res

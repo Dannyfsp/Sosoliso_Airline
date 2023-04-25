@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { IGetPassengerAuth } from "../../auth/interface/auth.interface";
 import { authSerice } from "../../auth/services/auth.service";
 import { bookingService } from "../services/booking.service";
-import { paymentService } from "../../payment/services/payment.service";
 
 export const bookFlight = async (req: Request, res: Response) => {
   const flightId: number = Number(req.params.flightId);
@@ -19,7 +18,8 @@ export const bookFlight = async (req: Request, res: Response) => {
 
     const seatExist = await bookingService.findSeatNumber(
       seatNumber,
-      flightClass
+      flightClass,
+      flightId
     );
 
     if (seatExist)
@@ -78,7 +78,7 @@ export const getBooking = async (req: Request, res: Response) => {
 export const cancelFlight = async (req: Request, res: Response) => {
   const user = (req as IGetPassengerAuth).passenger;
   const bookingId: number = Number(req.params.bookingId);
-  const cancel: boolean = req.body.cancel;
+  const cancelFlight: boolean = req.body.cancel;
   try {
     const checkBooking = await bookingService.findBooking(user.id, bookingId);
     if (!checkBooking)
@@ -86,7 +86,7 @@ export const cancelFlight = async (req: Request, res: Response) => {
         message: `booking id ${bookingId} doest not relate to this passenger`,
       });
 
-    await bookingService.cancelBooking(user.id, bookingId, cancel);
+    await bookingService.cancelBooking(user.id, bookingId, cancelFlight);
 
     return res.status(200).json({ message: "booking cancelled successfully" });
   } catch (error: any) {

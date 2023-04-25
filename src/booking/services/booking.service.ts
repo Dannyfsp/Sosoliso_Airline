@@ -16,10 +16,14 @@ export const bookingService = {
     return result.rows[0];
   },
 
-  findSeatNumber: async (seatNumber: string, classType: string) => {
+  findSeatNumber: async (
+    seatNumber: string,
+    classType: string,
+    flightId: number
+  ) => {
     const result = await pool.query(
-      "SELECT * FROM booking WHERE seat_number = $1 AND flight_class = $2",
-      [seatNumber, classType]
+      "SELECT * FROM booking WHERE seat_number = $1 AND flight_class = $2 AND flight_id = $3",
+      [seatNumber, classType, flightId]
     );
     return result.rows[0];
   },
@@ -36,10 +40,11 @@ export const bookingService = {
     ]);
   },
 
-  flightAvailability: async (classType: string) => {
-    const result = await pool.query(`SELECT * FROM flight WHERE $1 = 0`, [
-      classType,
-    ]);
+  flightAvailability: async (classType: string, flightId: number) => {
+    const result = await pool.query(
+      `SELECT * FROM flight WHERE $1 = 0 AND id = $2`,
+      [classType, flightId]
+    );
     return result.rows[0];
   },
 
