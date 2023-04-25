@@ -42,8 +42,8 @@ export const bookingService = {
 
   flightAvailability: async (classType: string, flightId: number) => {
     const result = await pool.query(
-      "SELECT * FROM flight WHERE $1 = 0 AND id = $2",
-      [classType, flightId]
+      `SELECT * FROM flight WHERE ${classType} = 0 AND id = $1`,
+      [flightId]
     );
     return result.rows[0];
   },
