@@ -28,8 +28,8 @@ export const payment = async (req: Request, res: Response) => {
       return res.status(400).json({
         message: `Hello ${user.first_name}, you've have already made payment for this booking id`,
       });
-    const realAmount = amount;
-    let total = realAmount * confirmBooking.number_of_seats;
+    const realAmount = Number(amount);
+    let total: number = realAmount * confirmBooking.number_of_seats;
 
     amount = total.toString() + "00";
 

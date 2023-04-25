@@ -11,6 +11,11 @@ export const paymentMiddleware = async (
   let { amount } = req.body;
   let { bookingId } = req.params;
   try {
+    const confirmBooking = await paymentService.confirmBookingId(
+      Number(bookingId),
+      user.id
+    );
+
     const getFlightClass = await paymentService.getFlightId(
       user.id,
       Number(bookingId)
@@ -27,17 +32,20 @@ export const paymentMiddleware = async (
         .json({ message: "amount is required and must be a number" });
 
     if (getFlightClass.flight_class === "first-class") {
-      if (priceOfFlight.price_first_class !== Number(amount))
+      const total = Number(amount) * confirmBooking.number_of_seats;
+      if (priceOfFlight.price_first_class !== total)
         return res.status(400).json({ message: "amount not equals to price" });
     }
 
     if (getFlightClass.flight_class === "business-class") {
-      if (priceOfFlight.price_business_class !== Number(amount))
+      const total = Number(amount) * confirmBooking.number_of_seats;
+      if (priceOfFlight.price_business_class !== total)
         return res.status(400).json({ message: "amount not equals to price" });
     }
 
     if (getFlightClass.flight_class === "economy-class") {
-      if (priceOfFlight.price_economy_class !== Number(amount))
+      const total = Number(amount) * confirmBooking.number_of_seats;
+      if (priceOfFlight.price_economy_class !== total)
         return res.status(400).json({ message: "amount not equals to price" });
     }
 
